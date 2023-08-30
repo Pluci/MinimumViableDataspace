@@ -120,3 +120,46 @@ services:
     ports:
       - "7082:80"
     profiles: [ "ui" ]
+
+# Add the PostgreSQL container to be used by DataspaceConnectorA and DataspaceConnectorB
+  company1-postgres:
+    image: postgres:13
+    container_name: 'company1-postgres-container'
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgresusercompany1
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=company1connectordb
+    volumes:
+      - connector-dataa:/var/lib/postgresql/data
+    networks:
+      - local
+
+  company2-postgres:
+    image: postgres:13
+    container_name: 'company2-postgres-container'
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=postgresusercompany2
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=company2connectordb
+    volumes:
+      - connector-datab:/var/lib/postgresql/data
+    networks:
+      - local
+
+  company3-postgres:
+    image: postgres:13
+    container_name: 'company3-postgres-container'
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=postgresusercompany3
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=company3connectordb
+    volumes:
+      - connector-dataa:/var/lib/postgresql/data
+    networks:
+      - local
