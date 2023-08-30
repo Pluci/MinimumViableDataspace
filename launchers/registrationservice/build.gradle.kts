@@ -46,6 +46,12 @@ dependencies {
     } else {
         runtimeOnly(libs.edc.azure.ext.vault)
     }
+
+    runtimeOnly(libs.edc.sql.core)
+    runtimeOnly(libs.edc.sql.lease)
+    runtimeOnly(libs.edc.sql.pool)
+
+    runtimeOnly(libs.edc.spi.transaction)
 }
 
 application {
