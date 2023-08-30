@@ -13,6 +13,7 @@ services:
       - company1.env
     depends_on:
       - registration-service
+      - company1-postgres
     ports:
       - "9191:9191"
       - "8181:8181"
@@ -32,6 +33,7 @@ services:
       - company2.env
     depends_on:
       - registration-service
+      - company2-postgres
     ports:
       - "9192:9191"
       - "8182:8181"
@@ -51,6 +53,7 @@ services:
       - company3.env
     depends_on:
       - registration-service
+      - company3-postgres
     ports:
       - "9193:9191"
       - "8183:8181"
