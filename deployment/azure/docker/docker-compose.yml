@@ -13,7 +13,7 @@ services:
       - company1.env
     depends_on:
       - registration-service
-      - company1-postgres
+      - postgres
     ports:
       - "9191:9191"
       - "8181:8181"
@@ -33,7 +33,7 @@ services:
       - company2.env
     depends_on:
       - registration-service
-      - company2-postgres
+      - postgres
     ports:
       - "9192:9191"
       - "8182:8181"
@@ -53,7 +53,7 @@ services:
       - company3.env
     depends_on:
       - registration-service
-      - company3-postgres
+      - postgres
     ports:
       - "9193:9191"
       - "8183:8181"
@@ -72,7 +72,8 @@ services:
       args:
         JVM_ARGS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5008"
     env_file: reg.env
-
+    depends_on:
+      - postgres
     ports:
       - "8184:8184"
       - "8185:8181"
@@ -125,44 +126,15 @@ services:
     profiles: [ "ui" ]
 
 # Add the PostgreSQL container to be used by DataspaceConnectorA and DataspaceConnectorB
-  company1-postgres:
+  postgres:
     image: postgres:13
-    container_name: 'company1-postgres-container'
+    container_name: 'postgres-container'
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=postgresusercompany1
+      - POSTGRES_USER=postgresuser
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=company1connectordb
-    volumes:
-      - connector-dataa:/var/lib/postgresql/data
-    networks:
-      - local
-
-  company2-postgres:
-    image: postgres:13
-    container_name: 'company2-postgres-container'
-    ports:
-      - "5433:5432"
-    environment:
-      - POSTGRES_USER=postgresusercompany2
-      - POSTGRES_PASSWORD=password
       - POSTGRES_DB=company2connectordb
-    volumes:
-      - connector-datab:/var/lib/postgresql/data
-    networks:
-      - local
-
-  company3-postgres:
-    image: postgres:13
-    container_name: 'company3-postgres-container'
-    ports:
-      - "5434:5432"
-    environment:
-      - POSTGRES_USER=postgresusercompany3
-      - POSTGRES_PASSWORD=password
       - POSTGRES_DB=company3connectordb
-    volumes:
-      - connector-dataa:/var/lib/postgresql/data
-    networks:
-      - local
+      - POSTGRES_DB=registrationservicedb

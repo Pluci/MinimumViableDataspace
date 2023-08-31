@@ -31,6 +31,7 @@ services:
       - did-server
       - azurite
       - registration-service
+      - postgres
     ports:
       - "9191:9191"
       - "8181:8181"
@@ -70,6 +71,7 @@ services:
       - did-server
       - azurite
       - registration-service
+      - postgres
     ports:
       - "9192:9191"
       - "8182:8181"
@@ -109,6 +111,7 @@ services:
       - did-server
       - azurite
       - registration-service
+      - postgres
     ports:
       - "9193:9191"
       - "8183:8181"
@@ -175,6 +178,8 @@ services:
       EDC_KEYSTORE: /resources/vault/registration-service/registration-service-keystore.jks
       EDC_KEYSTORE_PASSWORD: test123
       EDC_ERROR_RESPONSE_VERBOSE: "true"
+    depends_on:
+      - postgres
     ports:
       - "8184:8184"
       - "8185:8181"
@@ -242,3 +247,17 @@ services:
     ports:
       - "7082:80"
     profiles: ["ui"]
+
+  # Add the PostgreSQL container to be used by DataspaceConnectorA and DataspaceConnectorB
+  postgres:
+    image: postgres:13
+    container_name: 'postgres-container'
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgresuser
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=company1connectordb
+      - POSTGRES_DB=company2connectordb
+      - POSTGRES_DB=company3connectordb
+      - POSTGRES_DB=registrationservicedb
