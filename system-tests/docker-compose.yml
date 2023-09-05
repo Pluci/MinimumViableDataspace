@@ -1,5 +1,5 @@
+version: "3"
 services:
-
   # EDC Connector to simulate a dataspace participant acting as a data provider which is located in EU.
   company1:
     container_name: company1
@@ -29,10 +29,14 @@ services:
       EDC_WEB_REST_CORS_HEADERS: "origin,content-type,accept,authorization,x-api-key"
       EDC_FS_CONFIG: resources/launchers/config/connector/config.properties
     depends_on:
-      - did-server
-      - azurite
-      - registration-service
-      - postgres-company-1
+      did-server:
+        condition: service_started
+      azurite:
+        condition: service_started
+      registration-service:
+        condition: service_started
+      postgres-company-1:
+        condition: service_healthy
     ports:
       - "9191:9191"
       - "8181:8181"
@@ -70,10 +74,14 @@ services:
       EDC_WEB_REST_CORS_HEADERS: "origin,content-type,accept,authorization,x-api-key"
       EDC_FS_CONFIG: resources/launchers/config/connector/config2.properties
     depends_on:
-      - did-server
-      - azurite
-      - registration-service
-      - postgres-company-2
+      did-server:
+        condition: service_started
+      azurite:
+        condition: service_started
+      registration-service:
+        condition: service_started
+      postgres-company-2:
+        condition: service_healthy
     ports:
       - "9192:9191"
       - "8182:8181"
@@ -111,10 +119,14 @@ services:
       EDC_WEB_REST_CORS_HEADERS: "origin,content-type,accept,authorization,x-api-key"
       EDC_FS_CONFIG: resources/launchers/config/connector/config3.properties
     depends_on:
-      - did-server
-      - azurite
-      - registration-service
-      - postgres-company-3
+      did-server:
+        condition: service_started
+      azurite:
+        condition: service_started
+      registration-service:
+        condition: service_started
+      postgres-company-3:
+        condition: service_healthy
     ports:
       - "9193:9191"
       - "8183:8181"
@@ -183,7 +195,8 @@ services:
       EDC_ERROR_RESPONSE_VERBOSE: "true"
       EDC_FS_CONFIG: resources/launchers/config/registrationservice/config.properties
     depends_on:
-      - postgres-registration-service
+      postgres-registration-service:
+        condition: service_healthy
     ports:
       - "8184:8184"
       - "8185:8181"
@@ -258,6 +271,11 @@ services:
     container_name: 'postgres-registration-service-container'
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U postgresuser -d test_db_edc'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
     environment:
       - POSTGRES_USER=postgresuser
       - POSTGRES_PASSWORD=password
@@ -275,6 +293,11 @@ services:
     container_name: 'postgres-company-1-container'
     ports:
       - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U postgresuser -d test_db_edc'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
     environment:
       - POSTGRES_USER=postgresuser
       - POSTGRES_PASSWORD=password
@@ -292,6 +315,11 @@ services:
     container_name: 'postgres-company-2-container'
     ports:
       - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U postgresuser -d test_db_edc'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
     environment:
       - POSTGRES_USER=postgresuser
       - POSTGRES_PASSWORD=password
@@ -309,6 +337,11 @@ services:
     container_name: 'postgres-company-3-container'
     ports:
       - "5435:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U postgresuser -d test_db_edc'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
     environment:
       - POSTGRES_USER=postgresuser
       - POSTGRES_PASSWORD=password
