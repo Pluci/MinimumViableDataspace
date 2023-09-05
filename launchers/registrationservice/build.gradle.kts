@@ -50,8 +50,10 @@ dependencies {
     runtimeOnly(libs.edc.sql.core)
     runtimeOnly(libs.edc.sql.lease)
     runtimeOnly(libs.edc.sql.pool)
-
-    runtimeOnly(libs.edc.spi.transaction)
+    runtimeOnly(libs.edc.sql.transaction.local)
+    runtimeOnly(libs.postgresql)
+    runtimeOnly(libs.edc.spi.transaction.datasource)
+    runtimeOnly(libs.edc.spi.transactionspi)
 }
 
 application {

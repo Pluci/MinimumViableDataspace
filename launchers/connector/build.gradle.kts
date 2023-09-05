@@ -71,6 +71,9 @@ dependencies {
     runtimeOnly(libs.ih.core.verifier)
     runtimeOnly(libs.ih.ext.credentials.jwt)
     runtimeOnly(libs.ih.ext.verifier.jwt)
+
+    runtimeOnly(libs.bundles.sql)
+    runtimeOnly(libs.postgresql)
 }
 
 application {
