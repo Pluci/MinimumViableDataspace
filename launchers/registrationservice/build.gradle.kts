@@ -54,6 +54,7 @@ dependencies {
     runtimeOnly(libs.postgresql)
     runtimeOnly(libs.edc.spi.transaction.datasource)
     runtimeOnly(libs.edc.spi.transactionspi)
+    runtimeOnly(libs.edc.spi.aggregateservices)
 }
 
 application {
