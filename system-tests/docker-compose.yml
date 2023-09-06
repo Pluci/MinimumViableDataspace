@@ -27,7 +27,7 @@ services:
       REGISTRATION_SERVICE_API_URL: http://registration-service:8184/api/authority
       EDC_WEB_REST_CORS_ENABLED: "true"
       EDC_WEB_REST_CORS_HEADERS: "origin,content-type,accept,authorization,x-api-key"
-      EDC_FS_CONFIG: resources/launchers/config/connector/config.properties
+      EDC_FS_CONFIG: /resources/launchers/config/connector/config1.properties
     depends_on:
       did-server:
         condition: service_started
@@ -44,6 +44,8 @@ services:
       - "7171:7171"
     volumes:
       - ./resources:/resources
+    links:
+      - postgres-company-1:postgres1.system-tests.edc
 
   # EDC Connector to simulate a dataspace participant acting as a data consumer which is located in EU.
   company2:
@@ -72,7 +74,7 @@ services:
       REGISTRATION_SERVICE_API_URL: http://registration-service:8184/api/authority
       EDC_WEB_REST_CORS_ENABLED: "true"
       EDC_WEB_REST_CORS_HEADERS: "origin,content-type,accept,authorization,x-api-key"
-      EDC_FS_CONFIG: resources/launchers/config/connector/config2.properties
+      EDC_FS_CONFIG: /resources/launchers/config/connector/config2.properties
     depends_on:
       did-server:
         condition: service_started
@@ -89,6 +91,8 @@ services:
       - "7172:7171"
     volumes:
       - ./resources:/resources
+    links:
+      - postgres-company-2:postgres2.system-tests.edc
 
   # EDC Connector to simulate a dataspace participant acting as a consumer which is located in US.
   company3:
@@ -117,7 +121,7 @@ services:
       REGISTRATION_SERVICE_API_URL: http://registration-service:8184/api/authority
       EDC_WEB_REST_CORS_ENABLED: "true"
       EDC_WEB_REST_CORS_HEADERS: "origin,content-type,accept,authorization,x-api-key"
-      EDC_FS_CONFIG: resources/launchers/config/connector/config3.properties
+      //EDC_FS_CONFIG: /resources/launchers/config/connector/config3.properties
     depends_on:
       did-server:
         condition: service_started
@@ -134,6 +138,8 @@ services:
       - "7173:7171"
     volumes:
       - ./resources:/resources
+    links:
+      - postgres-company-3:postgres3.system-tests.edc
 
   # Usages postman collections for initial data seeding to connectors.
   newman:
@@ -193,7 +199,7 @@ services:
       EDC_KEYSTORE: /resources/vault/registration-service/registration-service-keystore.jks
       EDC_KEYSTORE_PASSWORD: test123
       EDC_ERROR_RESPONSE_VERBOSE: "true"
-      EDC_FS_CONFIG: resources/launchers/config/registrationservice/config.properties
+      EDC_FS_CONFIG: /resources/launchers/config/registrationservice/config.properties
     depends_on:
       postgres-registration-service:
         condition: service_healthy
@@ -204,6 +210,8 @@ services:
       - "7174:7171"
     volumes:
       - ./resources:/resources
+    links:
+      - postgres-registration-service:postgres-registration-service.system-tests.edc
 
   # cli-tools to help setup MVD environment e.g. registering participant to authority.
   cli-tools:
@@ -287,6 +295,11 @@ services:
       - ./resources/postgres/script/connector/init-contract-negotiation.sql:/docker-entrypoint-initdb.d/init-contract-negotiations.sql
       - ./resources/postgres/script/connector/init-policy-definitions.sql:/docker-entrypoint-initdb.d/init-policy-definitions.sql
       - ./resources/postgres/script/connector/init-transfer-process.sql:/docker-entrypoint-initdb.d/init-transfer-process.sql
+    depends_on:
+      did-server:
+        condition: service_started
+      azurite:
+        condition: service_started
 
   postgres-company-1:
     image: postgres:13
@@ -309,6 +322,11 @@ services:
       - ./resources/postgres/script/connector/init-contract-negotiation.sql:/docker-entrypoint-initdb.d/init-contract-negotiations.sql
       - ./resources/postgres/script/connector/init-policy-definitions.sql:/docker-entrypoint-initdb.d/init-policy-definitions.sql
       - ./resources/postgres/script/connector/init-transfer-process.sql:/docker-entrypoint-initdb.d/init-transfer-process.sql
+    depends_on:
+      did-server:
+        condition: service_started
+      azurite:
+        condition: service_started
 
   postgres-company-2:
     image: postgres:13
@@ -331,6 +349,11 @@ services:
       - ./resources/postgres/script/connector/init-contract-negotiation.sql:/docker-entrypoint-initdb.d/init-contract-negotiations.sql
       - ./resources/postgres/script/connector/init-policy-definitions.sql:/docker-entrypoint-initdb.d/init-policy-definitions.sql
       - ./resources/postgres/script/connector/init-transfer-process.sql:/docker-entrypoint-initdb.d/init-transfer-process.sql
+    depends_on:
+      did-server:
+        condition: service_started
+      azurite:
+        condition: service_started
 
   postgres-company-3:
     image: postgres:13
@@ -353,3 +376,13 @@ services:
       - ./resources/postgres/script/connector/init-contract-negotiation.sql:/docker-entrypoint-initdb.d/init-contract-negotiations.sql
       - ./resources/postgres/script/connector/init-policy-definitions.sql:/docker-entrypoint-initdb.d/init-policy-definitions.sql
       - ./resources/postgres/script/connector/init-transfer-process.sql:/docker-entrypoint-initdb.d/init-transfer-process.sql
+    depends_on:
+      did-server:
+        condition: service_started
+      azurite:
+        condition: service_started
+
+  ubuntu:
+    image: ubuntu:latest
+    container_name: 'ubuntu-test-container'
+    command: tail -F anything
