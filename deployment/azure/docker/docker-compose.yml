@@ -12,7 +12,6 @@ services:
       - company1.env
     depends_on:
       - registration-service
-      - postgres
     ports:
       - "9191:9191"
       - "8181:8181"
@@ -32,7 +31,6 @@ services:
       - company2.env
     depends_on:
       - registration-service
-      - postgres
     ports:
       - "9192:9191"
       - "8182:8181"
@@ -52,7 +50,6 @@ services:
       - company3.env
     depends_on:
       - registration-service
-      - postgres
     ports:
       - "9193:9191"
       - "8183:8181"
@@ -70,8 +67,6 @@ services:
       args:
         JVM_ARGS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5008"
     env_file: reg.env
-    depends_on:
-      - postgres
     ports:
       - "8184:8184"
       - "8185:8181"
@@ -122,17 +117,3 @@ services:
     ports:
       - "7082:80"
     profiles: [ "ui" ]
-
-# Add the PostgreSQL container to be used by DataspaceConnectorA and DataspaceConnectorB
-  postgres:
-    image: postgres:13
-    container_name: 'postgres-container'
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgresuser
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=company1connectordb
-      - POSTGRES_DB=company2connectordb
-      - POSTGRES_DB=company3connectordb
-      - POSTGRES_DB=registrationservicedb
