@@ -121,7 +121,7 @@ services:
       REGISTRATION_SERVICE_API_URL: http://registration-service:8184/api/authority
       EDC_WEB_REST_CORS_ENABLED: "true"
       EDC_WEB_REST_CORS_HEADERS: "origin,content-type,accept,authorization,x-api-key"
-      //EDC_FS_CONFIG: /resources/launchers/config/connector/config3.properties
+      EDC_FS_CONFIG: /resources/launchers/config/connector/config3.properties
     depends_on:
       did-server:
         condition: service_started
@@ -141,27 +141,7 @@ services:
     links:
       - postgres-company-3:postgres3.system-tests.edc
 
-  # Usages postman collections for initial data seeding to connectors.
-  newman:
-    container_name: newman
-    image: postman/newman:ubuntu
-    entrypoint: /bin/bash
-    command: deployment/seed-data.sh
-    volumes:
-      - ../deployment/:/deployment
-    working_dir: /
-    environment:
-      API_KEY: ApiKeyDefaultValue
-      EDC_HOST: company1:company2:company3
-      ASSETS_STORAGE_ACCOUNT: company1assets:company2assets:company3assets
-      PARTICIPANT_ID: company1:company2:company3
-    depends_on:
-      company1:
-        condition: service_healthy
-      company2:
-        condition: service_healthy
-      company3:
-        condition: service_healthy
+
 
   # A nginx based HTTP server to serve dataspace participants DIDs.
   did-server:
@@ -199,7 +179,7 @@ services:
       EDC_KEYSTORE: /resources/vault/registration-service/registration-service-keystore.jks
       EDC_KEYSTORE_PASSWORD: test123
       EDC_ERROR_RESPONSE_VERBOSE: "true"
-      EDC_FS_CONFIG: /resources/launchers/config/registrationservice/config.properties
+      EDC_FS_CONFIG: /resources/launchers/config/registration-service/config.properties
     depends_on:
       postgres-registration-service:
         condition: service_healthy
@@ -290,11 +270,8 @@ services:
       - POSTGRES_DB=test_db_edc
     volumes:
       - ./postgres/data/registration-service:/var/lib/postgresql/data
-      - ./resources/postgres/script/connector/init-asset.sql:/docker-entrypoint-initdb.d/init-asset.sql
-      - ./resources/postgres/script/connector/init-contract-definitions.sql:/docker-entrypoint-initdb.d/init-contract-definitions.sql
-      - ./resources/postgres/script/connector/init-contract-negotiation.sql:/docker-entrypoint-initdb.d/init-contract-negotiations.sql
-      - ./resources/postgres/script/connector/init-policy-definitions.sql:/docker-entrypoint-initdb.d/init-policy-definitions.sql
-      - ./resources/postgres/script/connector/init-transfer-process.sql:/docker-entrypoint-initdb.d/init-transfer-process.sql
+      - ./resources/postgres/script/resitration-service/init-identityhub.sql:/docker-entrypoint-initdb.d/init-identityhub.sql
+      - ./resources/postgres/script/resitration-service/init-participant.sql:/docker-entrypoint-initdb.d/init-participant.sql
     depends_on:
       did-server:
         condition: service_started

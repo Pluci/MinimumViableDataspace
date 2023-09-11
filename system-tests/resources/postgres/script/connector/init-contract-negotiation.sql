@@ -43,8 +43,8 @@ CREATE TABLE IF NOT EXISTS edc_contract_negotiation
     correlation_id       VARCHAR,
     counterparty_id      VARCHAR                                            NOT NULL,
     counterparty_address VARCHAR                                            NOT NULL,
-    protocol             VARCHAR DEFAULT 'ids-multipart'::CHARACTER VARYING NOT NULL,
-    type                 INTEGER DEFAULT 0                                  NOT NULL,
+    protocol             VARCHAR                                            NOT NULL,
+    type                 VARCHAR                                            NOT NULL,
     state                INTEGER DEFAULT 0                                  NOT NULL,
     state_count          INTEGER DEFAULT 0,
     state_timestamp      BIGINT,
@@ -53,7 +53,9 @@ CREATE TABLE IF NOT EXISTS edc_contract_negotiation
         CONSTRAINT contract_negotiation_contract_agreement_id_fk
             REFERENCES edc_contract_agreement,
     contract_offers      JSON,
+    callback_addresses   JSON,
     trace_context        JSON,
+    pending              BOOLEAN DEFAULT FALSE,
     lease_id             VARCHAR
         CONSTRAINT contract_negotiation_lease_lease_id_fk
             REFERENCES edc_lease

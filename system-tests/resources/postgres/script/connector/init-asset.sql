@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS edc_asset_property
     property_name  VARCHAR NOT NULL,
     property_value VARCHAR NOT NULL,
     property_type  VARCHAR NOT NULL,
+    property_is_private BOOLEAN NOT NULL,
     PRIMARY KEY (asset_id_fk, property_name),
     FOREIGN KEY (asset_id_fk) REFERENCES edc_asset (asset_id) ON DELETE CASCADE
 );

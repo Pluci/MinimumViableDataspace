@@ -1,19 +1,4 @@
 -- Statements are designed for and tested with Postgres only!
-
-CREATE TABLE IF NOT EXISTS edc_lease
-(
-    leased_by      VARCHAR NOT NULL,
-    leased_at      BIGINT,
-    lease_duration INTEGER NOT NULL,
-    lease_id       VARCHAR NOT NULL
-      CONSTRAINT lease_pk
-          PRIMARY KEY
-);
-
-COMMENT ON COLUMN edc_lease.leased_at IS 'posix timestamp of lease';
-
-COMMENT ON COLUMN edc_lease.lease_duration IS 'duration of lease in milliseconds';
-
 CREATE TABLE IF NOT EXISTS edc_transfer_process
 (
     transferprocess_id       VARCHAR           NOT NULL
@@ -23,6 +8,7 @@ CREATE TABLE IF NOT EXISTS edc_transfer_process
     state                    INTEGER           NOT NULL,
     state_count              INTEGER DEFAULT 0 NOT NULL,
     state_time_stamp         BIGINT,
+    pending                  BOOLEAN,
     created_at               BIGINT            NOT NULL,
     updated_at               BIGINT            NOT NULL,
     trace_context            JSON,
@@ -46,7 +32,6 @@ COMMENT ON COLUMN edc_transfer_process.provisioned_resource_set IS 'ProvisionedR
 COMMENT ON COLUMN edc_transfer_process.content_data_address IS 'DataAddress serialized as JSON';
 
 COMMENT ON COLUMN edc_transfer_process.deprovisioned_resources IS 'List of deprovisioned resources, serialized as JSON';
-
 
 CREATE UNIQUE INDEX IF NOT EXISTS transfer_process_id_uindex
     ON edc_transfer_process (transferprocess_id);
