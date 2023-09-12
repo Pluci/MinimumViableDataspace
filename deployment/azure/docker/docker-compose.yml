@@ -12,6 +12,7 @@ services:
       - company1.env
     depends_on:
       - registration-service
+      - postgres-company-1
     ports:
       - "9191:9191"
       - "8181:8181"
@@ -31,6 +32,7 @@ services:
       - company2.env
     depends_on:
       - registration-service
+      - postgres-company-2
     ports:
       - "9192:9191"
       - "8182:8181"
@@ -50,6 +52,7 @@ services:
       - company3.env
     depends_on:
       - registration-service
+      - postgres-company-3
     ports:
       - "9193:9191"
       - "8183:8181"
@@ -67,6 +70,8 @@ services:
       args:
         JVM_ARGS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5008"
     env_file: reg.env
+    depends_on:
+      - postgres-registration-service
     ports:
       - "8184:8184"
       - "8185:8181"
@@ -89,8 +94,7 @@ services:
       - "7080:80"
     profiles: [ "ui" ]
 
-    # Data Dashboard (MVD UI) for participant company2
-
+  # Data Dashboard (MVD UI) for participant company2
   company2-datadashboard:
     container_name: company2-datadashboard
     build:
@@ -117,3 +121,91 @@ services:
     ports:
       - "7082:80"
     profiles: [ "ui" ]
+
+  # PostgreSQL container for registration service
+  postgres-registration-service:
+    image: postgres:13
+    container_name: postgres-registration-service-container
+    ports:
+      - "5432:5432"
+    healthcheck:
+      # Check is the database ready
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U postgresuser -d mvd_db'" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    env_file:
+      - postgres.env
+    volumes:
+      - ../resources/database/registration-service:/var/lib/postgresql/data
+      - ../resources/postgres-init-script/init-identityhub.sql:/docker-entrypoint-initdb.d/init-identityhub.sql
+      - ../resources/postgres-init-script/init-participant.sql:/docker-entrypoint-initdb.d/init-participant.sql
+
+  # PostgreSQL container for company1
+  postgres-company-1:
+    image: postgres:13
+    container_name: postgres-registration-service-container
+    ports:
+      - "5432:5432"
+    healthcheck:
+      # Check is the database ready
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U postgresuser -d mvd_db'" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    env_file:
+      - postgres.env
+    volumes:
+      - ../resources/database/registration-service:/var/lib/postgresql/data
+      - ../resources/postgres-init-script/init-asset.sql:/docker-entrypoint-initdb.d/init-asset.sql
+      - ../resources/postgres-init-script/init-contract-definitions.sql:/docker-entrypoint-initdb.d/init-contract-definitions.sql
+      - ../resources/postgres-init-script/init-contract-negotiation.sql:/docker-entrypoint-initdb.d/init-contract-negotiations.sql
+      - ../resources/postgres-init-script/init-policy-definitions.sql:/docker-entrypoint-initdb.d/init-policy-definitions.sql
+      - ../resources/postgres-init-script/init-transfer-process.sql:/docker-entrypoint-initdb.d/init-transfer-process.sql
+      - ../resources/postgres-init-script/init-identityhub.sql:/docker-entrypoint-initdb.d/init-identityhub.sql
+
+  # PostgreSQL container for company2
+  postgres-company-2:
+    image: postgres:13
+    container_name: postgres-registration-service-container
+    ports:
+      - "5432:5432"
+    healthcheck:
+      # Check is the database ready
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U postgresuser -d mvd_db'" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    env_file:
+      - postgres.env
+    volumes:
+      - ../resources/database/registration-service:/var/lib/postgresql/data
+      - ../resources/postgres-init-script/init-asset.sql:/docker-entrypoint-initdb.d/init-asset.sql
+      - ../resources/postgres-init-script/init-contract-definitions.sql:/docker-entrypoint-initdb.d/init-contract-definitions.sql
+      - ../resources/postgres-init-script/init-contract-negotiation.sql:/docker-entrypoint-initdb.d/init-contract-negotiations.sql
+      - ../resources/postgres-init-script/init-policy-definitions.sql:/docker-entrypoint-initdb.d/init-policy-definitions.sql
+      - ../resources/postgres-init-script/init-transfer-process.sql:/docker-entrypoint-initdb.d/init-transfer-process.sql
+      - ../resources/postgres-init-script/init-identityhub.sql:/docker-entrypoint-initdb.d/init-identityhub.sql
+
+  # PostgreSQL container for company3
+  postgres-company-3:
+    image: postgres:13
+    container_name: postgres-registration-service-container
+    ports:
+      - "5432:5432"
+    healthcheck:
+      # Check is the database ready
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U postgresuser -d mvd_db'" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    env_file:
+      - postgres.env
+    volumes:
+      - ../resources/database/registration-service:/var/lib/postgresql/data
+      - ../resources/postgres-init-script/init-asset.sql:/docker-entrypoint-initdb.d/init-asset.sql
+      - ../resources/postgres-init-script/init-contract-definitions.sql:/docker-entrypoint-initdb.d/init-contract-definitions.sql
+      - ../resources/postgres-init-script/init-contract-negotiation.sql:/docker-entrypoint-initdb.d/init-contract-negotiations.sql
+      - ../resources/postgres-init-script/init-policy-definitions.sql:/docker-entrypoint-initdb.d/init-policy-definitions.sql
+      - ../resources/postgres-init-script/init-transfer-process.sql:/docker-entrypoint-initdb.d/init-transfer-process.sql
+      - ../resources/postgres-init-script/init-identityhub.sql:/docker-entrypoint-initdb.d/init-identityhub.sql
