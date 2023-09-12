@@ -27,7 +27,7 @@ services:
       REGISTRATION_SERVICE_API_URL: http://registration-service:8184/api/authority
       EDC_WEB_REST_CORS_ENABLED: "true"
       EDC_WEB_REST_CORS_HEADERS: "origin,content-type,accept,authorization,x-api-key"
-      EDC_FS_CONFIG: /resources/launchers/config/connector/config1.properties
+      EDC_FS_CONFIG: /resources/launchers/config/connector/company1/config.properties
     depends_on:
       did-server:
         condition: service_started
@@ -74,7 +74,7 @@ services:
       REGISTRATION_SERVICE_API_URL: http://registration-service:8184/api/authority
       EDC_WEB_REST_CORS_ENABLED: "true"
       EDC_WEB_REST_CORS_HEADERS: "origin,content-type,accept,authorization,x-api-key"
-      EDC_FS_CONFIG: /resources/launchers/config/connector/config2.properties
+      EDC_FS_CONFIG: /resources/launchers/config/connector/company2/config.properties
     depends_on:
       did-server:
         condition: service_started
@@ -121,7 +121,7 @@ services:
       REGISTRATION_SERVICE_API_URL: http://registration-service:8184/api/authority
       EDC_WEB_REST_CORS_ENABLED: "true"
       EDC_WEB_REST_CORS_HEADERS: "origin,content-type,accept,authorization,x-api-key"
-      EDC_FS_CONFIG: /resources/launchers/config/connector/config3.properties
+      EDC_FS_CONFIG: /resources/launchers/config/connector/company3/config.properties
     depends_on:
       did-server:
         condition: service_started
@@ -273,7 +273,7 @@ services:
       - "7082:80"
     profiles: [ "ui" ]
 
-  # Add the PostgreSQL container to be used by DataspaceConnectorA and DataspaceConnectorB
+  # PostgreSQL container for registration service
   postgres-registration-service:
     image: postgres:13
     container_name: 'postgres-registration-service-container'
@@ -381,8 +381,3 @@ services:
         condition: service_started
       azurite:
         condition: service_started
-
-  ubuntu:
-    image: ubuntu:latest
-    container_name: 'ubuntu-test-container'
-    command: tail -F anything
