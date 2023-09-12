@@ -47,14 +47,17 @@ dependencies {
         runtimeOnly(libs.edc.azure.ext.vault)
     }
 
-    runtimeOnly(libs.edc.sql.core)
-    runtimeOnly(libs.edc.sql.lease)
-    runtimeOnly(libs.edc.sql.pool)
-    runtimeOnly(libs.edc.sql.transaction.local)
-    runtimeOnly(libs.postgresql)
-    runtimeOnly(libs.edc.spi.transaction.datasource)
-    runtimeOnly(libs.edc.spi.transactionspi)
-    runtimeOnly(libs.edc.spi.aggregateservices)
+    val usePostgresDatabase: Boolean = System.getProperty("usePostgresDatabase", "true").toBoolean()
+    if(usePostgresDatabase){
+        runtimeOnly(libs.edc.sql.core)
+        runtimeOnly(libs.edc.sql.lease)
+        runtimeOnly(libs.edc.sql.pool)
+        runtimeOnly(libs.edc.sql.transaction.local)
+        runtimeOnly(libs.postgresql)
+        runtimeOnly(libs.edc.spi.transaction.datasource)
+        runtimeOnly(libs.edc.spi.transactionspi)
+        runtimeOnly(libs.edc.spi.aggregateservices)
+    }
 }
 
 application {

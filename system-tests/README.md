@@ -35,6 +35,12 @@ From the `MVD` root folder, execute the following command to build the connector
 ./gradlew -DuseFsVault="true" :launchers:connector:shadowJar
 ./gradlew -DuseFsVault="true" :launchers:registrationservice:shadowJar
 ```
+If you want to use an in-memory database instead of PostgreSQL for local execution, you can turn it off using the following command:
+
+```bash
+./gradlew -DuseFsVault="true" -DusePostgresDatabase="false" :launchers:connector:shadowJar
+./gradlew -DuseFsVault="true" -DusePostgresDatabase="false" :launchers:registrationservice:shadowJar
+```
 
 Then, to bring up the dataspace, please execute the following command from the `MVD` root folder:
 

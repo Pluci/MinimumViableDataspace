@@ -72,8 +72,11 @@ dependencies {
     runtimeOnly(libs.ih.ext.credentials.jwt)
     runtimeOnly(libs.ih.ext.verifier.jwt)
 
-    runtimeOnly(libs.bundles.sql)
-    runtimeOnly(libs.postgresql)
+    val usePostgresDatabase: Boolean = System.getProperty("usePostgresDatabase", "true").toBoolean()
+    if(usePostgresDatabase){
+        runtimeOnly(libs.bundles.sql)
+        runtimeOnly(libs.postgresql)
+    }
 }
 
 application {
